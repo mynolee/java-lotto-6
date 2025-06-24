@@ -117,16 +117,25 @@ public class Application {
             }
             boolean hasBonus = numbers.contains(bonusNumber);
 
-            if (matchCount == 6) {
-                result.put("6", result.get("6") + 1);
-            } else if (matchCount == 5 && hasBonus) {
-                result.put("5+bonus", result.get("5+bonus") + 1);
-            } else if (matchCount == 5) {
-                result.put("5", result.get("5") + 1);
-            } else if (matchCount == 4) {
-                result.put("4", result.get("4") + 1);
-            } else if (matchCount == 3) {
-                result.put("3", result.get("3") + 1);
+            switch (matchCount) {
+                case 6:
+                    result.put("6", result.get("6") + 1);
+                    break;
+                case 5:
+                    if (hasBonus) {
+                        result.put("5+bonus", result.get("5+bonus") + 1);
+                    } else {
+                        result.put("5", result.get("5") + 1);
+                    }
+                    break;
+                case 4:
+                    result.put("4", result.get("4") + 1);
+                    break;
+                case 3:
+                    result.put("3", result.get("3") + 1);
+                    break;
+                default:
+                    break;
             }
         }
         return result;
