@@ -117,12 +117,7 @@ public class Application {
 
         for (Lotto lotto : lottos) {
             List<Integer> numbers = lotto.getNumbers();
-            int matchCount = 0;
-            for (int num : numbers) {
-                if (winningNumbers.contains(num)) {
-                    matchCount++;
-                }
-            }
+            int matchCount = calculateMatchCount(numbers, winningNumbers);
             boolean hasBonus = numbers.contains(bonusNumber);
 
             switch (matchCount) {
@@ -147,6 +142,16 @@ public class Application {
             }
         }
         return result;
+    }
+
+    private static int calculateMatchCount(List<Integer> numbers, List<Integer> winningNumbers) {
+        int matchCount = 0;
+        for (int num : numbers) {
+            if (winningNumbers.contains(num)) {
+                matchCount++;
+            }
+        }
+        return matchCount;
     }
 
     private static void printResult(Map<String, Integer> result, int purchaseAmount, Map<String, Integer> prizeTable) {
