@@ -23,11 +23,11 @@ public class Application {
     }
 
     private static void startLottoGame() {
-        int purchaseAmount = readPurchaseAmount();
-        List<Lotto> lottos = purchaseLottos(purchaseAmount);
+        int purchaseAmount = getPurchaseAmount();
+        List<Lotto> lottos = getPurchaseLottos(purchaseAmount);
         List<Integer> winningNumbers = readWinningNumbers();
-        int bonusNumber = readBonusNumber(winningNumbers);
-        Map<String, Integer> results = matchLottos(lottos, winningNumbers, bonusNumber);
+        int bonusNumber = getBonusNumber(winningNumbers);
+        Map<String, Integer> results = getMatchLottos(lottos, winningNumbers, bonusNumber);
 
         Map<String, Integer> prizeTable = new LinkedHashMap<>();
         prizeTable.put("3", 5_000);
@@ -39,7 +39,7 @@ public class Application {
         printResult(results, purchaseAmount, prizeTable);
     }
 
-    private static int readPurchaseAmount() {
+    private static int getPurchaseAmount() {
         System.out.println("구입금액을 입력해 주세요.");
         String input = Console.readLine();
         int amount = parseInteger(input);
@@ -57,7 +57,7 @@ public class Application {
         }
     }
 
-    private static List<Lotto> purchaseLottos(int amount) {
+    private static List<Lotto> getPurchaseLottos(int amount) {
         int count = amount / TICKET_PRICE;
         printPurchaseCount(count);
         List<Lotto> lottos = new ArrayList<>();
@@ -95,7 +95,7 @@ public class Application {
         return list;
     }
 
-    private static int readBonusNumber(List<Integer> winningNumbers) {
+    private static int getBonusNumber(List<Integer> winningNumbers) {
         System.out.println("\n보너스 번호를 입력해 주세요.");
         int bonus = parseInteger(Console.readLine());
         validateNumber(bonus);
@@ -111,7 +111,7 @@ public class Application {
         }
     }
 
-    private static Map<String, Integer> matchLottos(List<Lotto> lottos, List<Integer> winningNumbers, int bonusNumber) {
+    private static Map<String, Integer> getMatchLottos(List<Lotto> lottos, List<Integer> winningNumbers, int bonusNumber) {
         Map<String, Integer> result = new LinkedHashMap<>();
         result.put("6", 0);
         result.put("5+bonus", 0);
