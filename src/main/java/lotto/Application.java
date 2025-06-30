@@ -59,7 +59,7 @@ public class Application {
 
     private static List<Lotto> purchaseLottos(int amount) {
         int count = amount / TICKET_PRICE;
-        System.out.println(count + "개를 구매했습니다.");
+        printPurchaseCount(count);
         List<Lotto> lottos = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             List<Integer> numbers = Randoms.pickUniqueNumbersInRange(1, 45, 6);
@@ -68,6 +68,10 @@ public class Application {
             System.out.println(lotto);
         }
         return lottos;
+    }
+
+    private static void printPurchaseCount(int count) {
+        System.out.println(count + "개를 구매했습니다.");
     }
 
     private static List<Integer> readWinningNumbers() {
