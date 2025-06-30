@@ -73,13 +73,13 @@ public class Application {
     private static List<Integer> readWinningNumbers() {
         System.out.println("\n당첨 번호를 입력해 주세요.");
         String input = Console.readLine();
-        String[] tokens = input.split(",");
-        if (tokens.length != 6) {
+        String[] numberStrs = input.split(",");
+        if (numberStrs.length != 6) {
             throw new IllegalArgumentException("당첨 번호는 6개여야 합니다.");
         }
         Set<Integer> numbers = new HashSet<>();
-        for (String token : tokens) {
-            int num = parseInteger(token.trim());
+        for (String numberStr : numberStrs) {
+            int num = parseInteger(numberStr.trim());
             validateNumber(num);
             numbers.add(num);
         }
