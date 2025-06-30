@@ -28,7 +28,15 @@ public class Application {
         List<Integer> winningNumbers = readWinningNumbers();
         int bonusNumber = readBonusNumber(winningNumbers);
         Map<String, Integer> results = matchLottos(lottos, winningNumbers, bonusNumber);
-        printResult(results, purchaseAmount);
+
+        Map<String, Integer> prizeTable = new LinkedHashMap<>();
+        prizeTable.put("3", 5_000);
+        prizeTable.put("4", 50_000);
+        prizeTable.put("5", 1_500_000);
+        prizeTable.put("5+bonus", 30_000_000);
+        prizeTable.put("6", 2_000_000_000);
+
+        printResult(results, purchaseAmount, prizeTable);
     }
 
     private static int readPurchaseAmount() {
@@ -141,22 +149,46 @@ public class Application {
         return result;
     }
 
-    private static void printResult(Map<String, Integer> result, int purchaseAmount) {
+    private static void printResult(Map<String, Integer> result, int purchaseAmount, Map<String, Integer> prizeTable) {
         System.out.println("\n당첨 통계\n---");
-        int total = 0;
-        total += result.get("3") * 5_000;
-        total += result.get("4") * 50_000;
-        total += result.get("5") * 1_500_000;
-        total += result.get("5+bonus") * 30_000_000;
-        total += result.get("6") * 2_000_000_000;
 
-        System.out.printf("3개 일치 (5,000원) - %d개\n", result.get("3"));
-        System.out.printf("4개 일치 (50,000원) - %d개\n", result.get("4"));
-        System.out.printf("5개 일치 (1,500,000원) - %d개\n", result.get("5"));
-        System.out.printf("5개 일치, 보너스 볼 일치 (30,000,000원) - %d개\n", result.get("5+bonus"));
-        System.out.printf("6개 일치 (2,000,000,000원) - %d개\n", result.get("6"));
+        printStatistics(result, prizeTable);
 
+        int total = calculateTotalPrize(result, prizeTable);
         double rate = (double) total / purchaseAmount * 100;
         System.out.printf("총 수익률은 %.1f%%입니다.%n", rate);
     }
+
+    private static void printStatistics(Map<String, Integer> result, Map<String, Integer> prizeTable) {
+        for (Map.Entry<String, Integer> entry : prizeTable.entrySet()) {
+            String key = entry.getKey();
+            int prize = entry.getValue();
+            String message = getMatchMessage(key, prize);
+            System.out.printf("%s - %d개%n", message, result.getOrDefault(key, 0));
+        }
+    }
+
+    private static int calculateTotalPrize(Map<String, Integer> result, Map<String, Integer> prizeTable) {
+        int total = 0;
+        for (String key : prizeTable.keySet()) {
+            total += result.getOrDefault(key, 0) * prizeTable.get(key);
+        }
+        return total;
+    }
+
+    private static String getMatchMessage(String key, int prize) {
+        return switch (key) {
+            case "3" -> "3개 일치 (" + formatMoney(prize) + "원)";
+            case "4" -> "4개 일치 (" + formatMoney(prize) + "원)";
+            case "5" -> "5개 일치 (" + formatMoney(prize) + "원)";
+            case "5+bonus" -> "5개 일치, 보너스 볼 일치 (" + formatMoney(prize) + "원)";
+            case "6" -> "6개 일치 (" + formatMoney(prize) + "원)";
+            default -> "";
+        };
+    }
+
+    private static String formatMoney(int amount) {
+        return String.format("%,d", amount);
+    }
+
 }
